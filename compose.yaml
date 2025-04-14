@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=root
+      - DB_PASSWORD=pass_strong
+      - DB_NAME=notejam
+    depends_on: 
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    volumes:
+      - notejam-mysql-data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=pass_strong
+      - MYSQL_DATABASE=notejam
+
+volumes:
+  notejam-mysql-data:
