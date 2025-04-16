@@ -1,27 +1,45 @@
-version: "3.8"
-
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 3000:3000
+      - "3000:3000"
     environment:
-      - DB_HOST=mysql
-      - DB_USER=root
-      - DB_PASSWORD=pass_strong
-      - DB_NAME=notejam
+      DB_HOST: db
+      DB_USER: lokesh
+      DB_PASSWORD: pass_strong
+      DB_NAME: notejam
+      DB_PORT: 5432
     depends_on: 
-      - mysql
+      db:
+        condition: service_healthy
+    networks:
+      - notejam_network
 
-  mysql:
-    image: mysql:8.0
+  db:
+    image: postgres:latest
     volumes:
-      - notejam-mysql-data:/var/lib/mysql
+      - pgdata:/var/lib/postgresql/data
+
+    ports:
+      - 5432:5432
     environment:
-      - MYSQL_ROOT_PASSWORD=pass_strong
-      - MYSQL_DATABASE=notejam
+      POSTGRES_USER: lokesh
+      POSTGRES_PASSWORD: pass_strong
+      POSTGRES_DB: notejam
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1s
+      timeout: 20s
+      retries: 10
+    networks:
+      - notejam_network
 
 volumes:
-  notejam-mysql-data:
+  pgdata:
+    name: notejam_pgdata
+
+networks:
+  notejam_network:
+    name: notejam_network

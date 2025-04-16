@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notejam
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: notejam
+  template:
+    metadata:
+      labels:
+        app: notejam
+    spec:
+      containers:
+      - name: notejam
+        image: lokeshvermaxs/notejam:latest
+        resources:
+          limits:
+            memory: 200Mi
+            cpu: 250m
+          requests:
+            cpu: 250m
+            memory: 200Mi
+        ports:
+        - containerPort: 3000
