@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: notejam-config
+data:
+  DB_HOST: notejam-db-service
+  DB_USER: lokesh
+  DB_PASSWORD: pass_strong
+  DB_NAME: notejam
+  DB_PORT: "5432"
